@@ -16,6 +16,9 @@ def clean_data(path):
     
     df = df.loc[:, ["date", "max_temperature", "avg_temperature", "min_temperature", "avg_relative_humidity", "avg_dew_point", "avg_wind_speed", "avg_pressure_sea", "avg_visibility", "min_visibility", 
                     "avg_health_index", "precipitation", "daylight", "solar_radiation", "avg_cloud_cover_8", "heatdegdays", "cooldegdays", "growdegdays_7" ]]
+    
+    df["date"] = pd.to_datetime(df["date"])
+    
     return df
 
 def main():
@@ -24,7 +27,7 @@ def main():
     df_clean = clean_data(RAW_PATH)
 
     PROCESSED_PATH.parent.mkdir(parents=True, exist_ok=True)
-    df_clean.to_csv(PROCESSED_PATH)
+    df_clean.to_csv(PROCESSED_PATH, index=False)
 
     print(f"Cleaned data saved to {PROCESSED_PATH}")
 
