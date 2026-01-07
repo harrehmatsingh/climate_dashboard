@@ -4,6 +4,18 @@ import pandas as pd
 df = pd.read_csv("data/cleaned/climate_cleaned.csv")
 df["date"] = pd.to_datetime(df["date"])
 
+# Extract month
+month = df["date"].dt.month
+
+# Create season column
+df["season"] = pd.Series(pd.NA, index=df.index)
+
+#setting up seasons
+df.loc[month.isin([12, 1, 2]), "season"] = "Winter"
+df.loc[month.isin([3, 4, 5]), "season"] = "Spring"
+df.loc[month.isin([6, 7, 8]), "season"] = "Summer"
+df.loc[month.isin([9, 10, 11]), "season"] = "Fall"
+
 st.title("Climate Dashboard")
 
 min_date = df["date"].min().date()
@@ -25,7 +37,7 @@ with st.sidebar:
     aggregation = st.selectbox(
         "Aggregate data by",
         ["Daily", "Monthly", "Seasonal", "Annual"],
-        index=1  # Monthly default is sensible
+        index=1  
     )
     
     st.subheader("Season Filter")
@@ -38,7 +50,7 @@ with st.sidebar:
     
     st.subheader("Comparison Mode")
     comparison_mode = st.radio(
-        "Compare data by",
-        ["Off", "Single Year", "Multiple Years", "Decade Comparison"]
+        "Switch comparison mode:",
+        ["On", "Off"]
     )
 
