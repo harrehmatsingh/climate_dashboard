@@ -53,4 +53,33 @@ with st.sidebar:
         "Switch comparison mode:",
         ["On", "Off"]
     )
+    
+    
+# trim the actual df to selected preferences
+sub_df = df[df["date"].between(start_date, end_date)] # trim teh df to selected time frame
+
+# get only the selected seasons
+if season:
+    sub_df = sub_df.loc[sub_df["season"].isin(season)]
+    
+# group the sub df by selected aggregation
+if aggregation is "Monthly":
+    grouped_dfs = {
+        key: group.copy()
+        for key, group in sub_df.groupby(sub_df["date"].dt.month)
+    }
+    
+elif aggregation is "Seasonal":
+    grouped_dfs = {
+        key: group.copy()
+        for key, group in sub_df.groupby("season")
+    }
+    
+elif aggregation is "Annual":
+    grouped_dfs = {
+        key: group.copy()
+        for key, group in sub_df.groupby(sub_df["date"].dt.year)
+    }
+    
+    
 
