@@ -63,19 +63,22 @@ if season:
     sub_df = sub_df.loc[sub_df["season"].isin(season)]
     
 # group the sub df by selected aggregation
-if aggregation is "Monthly":
+if aggregation == "Daily":
+    grouped_dfs = {"Daily": sub_df.copy()}
+        
+elif aggregation == "Monthly":
     grouped_dfs = {
         key: group.copy()
-        for key, group in sub_df.groupby(sub_df["date"].dt.month)
+        for key, group in sub_df.groupby([sub_df["date"].dt.year, sub_df["date"].dt.month])
     }
     
-elif aggregation is "Seasonal":
+elif aggregation == "Seasonal":
     grouped_dfs = {
         key: group.copy()
-        for key, group in sub_df.groupby("season")
+        for key, group in sub_df.groupby([sub_df["date"].dt.year, sub_df["season"]])
     }
     
-elif aggregation is "Annual":
+elif aggregation == "Annual":
     grouped_dfs = {
         key: group.copy()
         for key, group in sub_df.groupby(sub_df["date"].dt.year)
